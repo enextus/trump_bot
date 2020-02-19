@@ -44,30 +44,30 @@ def welcome(message):
 
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
 
-    item_1 = types.KeyboardButton("🎲 Zufallszahl")
-    item_2 = types.KeyboardButton("😊 Wie geht es Dir?")
+    item_1 = types.KeyboardButton("🎲 random number")
+    item_2 = types.KeyboardButton("😊 How are you?")
 
     markup.add(item_1, item_2)
 
-    bot.send_message(message.chat.id, "Willkommen zurück, {0.first_name}!\nIch bin - <b>{1.first_name}</b>, der Trump-Bot.".format(message.from_user, bot.get_me()), parse_mode='html', reply_markup=markup)
+    bot.send_message(message.chat.id, "Welcome back, {0.first_name}!\nIch bin - <b>{1.first_name}</b>, der Trump-Bot.".format(message.from_user, bot.get_me()), parse_mode='html', reply_markup=markup)
 
 @bot.message_handler(content_types=['text'])
 def lalala(message):
     if message.chat.type == 'private':
-        if message.text == '🎲 Zufallszahl':
+        if message.text == '🎲 random number':
 
             random.seed()
 
             bot.send_message(message.chat.id, str(random.randint(0,100)))
 
-        elif message.text == '😊 Wie geht es Dir?':
+        elif message.text == '😊 How are you?':
 
-            markup = types.InlineKeyboardMarkup(row_width=2)
-            item_1 = types.InlineKeyboardButton("Mir geht es gut!", callback_data='good')
-            item_2 = types.InlineKeyboardButton("Es könnte besser sein...", callback_data='bad')
+            markup = types.InlineKeyboardMarkup(row_width=3)
+            item_1 = types.InlineKeyboardButton("I'am fine!", callback_data='good')
+            item_2 = types.InlineKeyboardButton("It could be better...", callback_data='bad')
 
             markup.add(item_1, item_2)
-            bot.send_message(message.chat.id, 'Sehr gut, und selbst?', reply_markup=markup)
+            bot.send_message(message.chat.id, 'Very good and you?', reply_markup=markup)
 
         else:
 
@@ -86,13 +86,13 @@ def callback_inline(call):
     try:
         if call.message:
             if call.data == 'good':
-                bot.send_message(call.message.chat.id, 'Das freut mich! Weiter so! 😊')
+                bot.send_message(call.message.chat.id, 'That pleases me! Keep it up! 😊')
             elif call.data == 'bad':
-                bot.send_message(call.message.chat.id, 'Kann passieren, sei stark! 😢')
+                bot.send_message(call.message.chat.id, 'Can happen, be strong! 😢')
             # remove inline buttons
-            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="😊", reply_markup=None)
+            bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="👇", reply_markup=None)
             # show alert
-            bot.answer_callback_query(callback_query_id=call.id, show_alert=False, text="Huhu - Ich bin hier oben!")
+            bot.answer_callback_query(callback_query_id=call.id, show_alert=False, text="Huhu - I'm up here!")
 
     except Exception as e:
         print(f"666. repr(e): {repr(e)}")
