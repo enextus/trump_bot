@@ -107,9 +107,10 @@ def processPhotoMessage(message):
     os_get_cwd = os.getcwd()
     photo_folder = '/photos/'
     photo_prefix = 'image_'
+    time_stamp = time.strftime('%Y%m%d-%H%M%S')
     photo_suffix = '.jpg'
 
-    new_name = os_get_cwd + photo_folder + photo_prefix + time.strftime('%Y%m%d-%H%M%S') + photo_suffix
+    new_name = os_get_cwd + photo_folder + photo_prefix + time_stamp + photo_suffix
 
     with open(new_name, 'wb') as new_file:
         new_file.write(downloaded_file)
