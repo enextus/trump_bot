@@ -1,3 +1,4 @@
+import os
 import time
 import config
 import random
@@ -14,9 +15,9 @@ import decorator
 # ein bot-object wird erstellt
 
 # data
-part1=["Putin", "Hillary", "Obama", "Fake News", "Mexico", "Arnold Schwarzenegger", "Democrats", "Xi Jinping", "Angela Merkel", "Jeff Bezos", "Bill Gates", "Emmanuel Macron", "Mark Zuckerberg", "Warren Buffett", "Jack Ma"]
-part2=["no talen", "on the way down", "really poor numbers", "nasty tone", "looking like a fool", "bad hombre"]
-part3=["got destroyed by my ratings.", "regged the election.", "had a much smaller crowd.", "will pay for the wall."]
+part1=["Putin", "Mike Tyson", "Hillary", "Obama", "Political correctness", "Fake News", "Mexico", "Arnold Schwarzenegger", "Democrats", "Xi Jinping", "Jeff Bezos", "Bill Gates", "Emmanuel Macron", "Mark Zuckerberg", "Warren Buffett", "Jack Ma"]
+part2=["no talen", "on the way down", "really poor numbers", "smart people", "nasty tone", "looking like a fool", "bad hombre", "stupid people"]
+part3=["is killing our country.", "could take one out of 10,000 could not do it.", "have no country if we have no border.", "is the level of stupidity that is incredible.", "got destroyed by my ratings.", "are fed up with stupid people.", "be wonderful if you have smart people.", "be smart and always remember, winning takes care of everything!", "never get bored!", "don't lose often.", "will start winning again!", "never get bored with winning.", "regged the election.", "had a much smaller crowd.", "will pay for the wall.", "is about winning."]
 part4=["So sad", "Apologize", "So true", "Media won't report", "Can you believe that?", "We have to make America great again!", "I don't believe in that", "Big trouble", "Fantastic job", "Stay tuned", "Believe me", "Work hard", "Right?", "Political correctness is killing our country", "Drain the Swamp", "Don’t worry, we will win!", "Be brutal, be tough", "Really bad people!"]
 
 bot = telebot.TeleBot(config.TOKEN)
@@ -70,7 +71,6 @@ def lalala(message):
             bot.send_message(message.chat.id, 'Very good and you?', reply_markup=markup)
 
         else:
-
             random.seed()
 
             # output
@@ -92,26 +92,35 @@ def callback_inline(call):
             # remove inline buttons
             bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="👇", reply_markup=None)
             # show alert
-            bot.answer_callback_query(callback_query_id=call.id, show_alert=False, text="Huhu - I'm up here!")
+            bot.answer_callback_query(callback_query_id=call.id, show_alert=True, text="Huhu - I'm up here!")
 
     except Exception as e:
         print(f"666. repr(e): {repr(e)}")
 
 @errLog
 def processPhotoMessage(message):
-    print(f"01. message.photo: {message.photo}")
+
     fileID = message.photo[-1].file_id
-    print(f"02. fileID ={fileID}")
     file = bot.get_file(fileID)
-    print(f"03. file.file_path: {file.file_path}\n")
-    print(f"04. file.file_path: {bot.get_file(fileID).file_path}\n")
     downloaded_file = bot.download_file(file.file_path)
-    with open("image_" + time.strftime('%Y%m%d-%H%M%S') + ".jpg", 'wb') as new_file:
+
+    os_get_cwd = os.getcwd()
+    photo_folder = '/photos/'
+    photo_prefix = 'image_'
+    photo_suffix = '.jpg'
+
+    new_name = os_get_cwd + photo_folder + photo_prefix + time.strftime('%Y%m%d-%H%M%S') + photo_suffix
+
+    with open(new_name, 'wb') as new_file:
         new_file.write(downloaded_file)
 
 @bot.message_handler(content_types=['photo'])
 def photo(message):
-    processPhotoMessage(message)
+    if message.chat.type == 'private':
+        processPhotoMessage(message)
+        if message.photo:
+            # show alert
+            bot.send_message(message.chat.id, str("The image was received!"))
 
 # RUN
 bot.polling(none_stop=True)
