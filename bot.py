@@ -1,12 +1,14 @@
+# PowerShell -> Set-ExecutionPolicy Unrestricted
+
 import os
 import time
 import config
 import random
-import telebot
-from telebot import types
-import decorator
 
-# pip install pytelegrambotapi
+import telebot
+from telebot import types  # "pip install pytelegrambotapi" required!
+
+import decorator
 
 # https://stackoverflow.com/questions/42796300/get-photo-in-telegram-bot-through-pytelegrambotapi/46242244
 # https://www.programcreek.com/python/example/94889/telebot.TeleBot
@@ -17,7 +19,7 @@ import decorator
 # data
 part1=["Putin", "Mike Tyson", "Hillary", "Obama", "Political correctness", "Fake News", "Mexico", "Arnold Schwarzenegger", "Democrats", "Xi Jinping", "Jeff Bezos", "Bill Gates", "Emmanuel Macron", "Mark Zuckerberg", "Warren Buffett", "Jack Ma"]
 part2=["no talen", "on the way down", "really poor numbers", "smart people", "nasty tone", "looking like a fool", "bad hombre", "stupid people"]
-part3=["is killing our country.", "could take one out of 10,000 could not do it.", "have no country if we have no border.", "is the level of stupidity that is incredible.", "got destroyed by my ratings.", "are fed up with stupid people.", "be wonderful if you have smart people.", "be smart and always remember, winning takes care of everything!", "never get bored!", "don't lose often.", "will start winning again!", "never get bored with winning.", "regged the election.", "had a much smaller crowd.", "will pay for the wall.", "is about winning."]
+part3=["is killing our country.", "have no country if we have no border.", "is the level of stupidity that is incredible.", "got destroyed by my ratings.", "are fed up with stupid people.", "be wonderful if you have smart people.", "be smart and always remember, winning takes care of everything!", "never get bored!", "don't lose often.", "will start winning again!", "never get bored with winning.", "regged the election.", "had a much smaller crowd.", "will pay for the wall.", "is about winning."]
 part4=["So sad", "Apologize", "So true", "Media won't report", "Can you believe that?", "We have to make America great again!", "I don't believe in that", "Big trouble", "Fantastic job", "Stay tuned", "Believe me", "Work hard", "Right?", "Political correctness is killing our country", "Drain the Swamp", "Don’t worry, we will win!", "Be brutal, be tough", "Really bad people!"]
 
 bot = telebot.TeleBot(config.TOKEN)
@@ -56,14 +58,12 @@ def welcome(message):
 def lalala(message):
     if message.chat.type == 'private':
         if message.text == '🎲 random number':
-
             random.seed()
-
             bot.send_message(message.chat.id, str(random.randint(0,100)))
 
         elif message.text == '😊 How are you?':
-
             markup = types.InlineKeyboardMarkup(row_width=3)
+
             item_1 = types.InlineKeyboardButton("I'am fine!", callback_data='good')
             item_2 = types.InlineKeyboardButton("It could be better...", callback_data='bad')
 
@@ -72,7 +72,6 @@ def lalala(message):
 
         else:
             random.seed()
-
             # output
             ending = random.choice(part4)
 
@@ -99,7 +98,6 @@ def callback_inline(call):
 
 @errLog
 def processPhotoMessage(message):
-
     fileID = message.photo[-1].file_id
     file = bot.get_file(fileID)
     downloaded_file = bot.download_file(file.file_path)
@@ -107,10 +105,9 @@ def processPhotoMessage(message):
     os_get_cwd = os.getcwd()
     photo_folder = '/photos/'
     photo_prefix = 'image_'
-    time_stamp = time.strftime('%Y%m%d-%H%M%S')
     photo_suffix = '.jpg'
 
-    new_name = os_get_cwd + photo_folder + photo_prefix + time_stamp + photo_suffix
+    new_name = os_get_cwd + photo_folder + photo_prefix + time.strftime('%Y%m%d-%H%M%S') + photo_suffix
 
     with open(new_name, 'wb') as new_file:
         new_file.write(downloaded_file)
